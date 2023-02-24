@@ -72,11 +72,12 @@ void main(void)
 
     while (1)
     {
-        uint16_t value;
+        float value;
         
-        value = ADC_GetConversion(voltage);
-        char* msg;
-        sprintf(msg, "%i", value);
+        value =(float)( ADC_GetConversion(voltage)/19.859);
+        char msg[16];
+        sprintf(msg, "Value : %3.1f mV", value);
+       // LCD_2x16_WriteCmd(0x01);    // clear display
         
         LCD_2x16_WriteMsg(msg,0);
         
