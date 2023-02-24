@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <executable name="dist/default/production\solar_panel.X.production.hex">
+    <memory name="program">
+      <units>bytes</units>
+      <length>131064</length>
+      <used>406</used>
+      <free>130658</free>
+    </memory>
+    <memory name="data">
+      <units>bytes</units>
+      <length>3808</length>
+      <used>10</used>
+      <free>3798</free>
+    </memory>
+  </executable>
+</project>
