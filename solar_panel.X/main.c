@@ -73,18 +73,24 @@ void main(void)
 
     while (1)
     {
-        float value;
+        float valueV;
         
-        value =(float)( ADC_GetConversion(voltage)/19.859);
+        valueV =(float)( ADC_GetConversion(voltage)/19.859); // TODO explain values
         char msg[MAX_COL+1];
         
-        snprintf(msg, MAX_COL+1, "Value : %3.1f mV   ", value);
+        snprintf(msg, MAX_COL+1, "U = %3.1f [mV]   ", valueV);
         
         //LCD_2x16_WriteCmd(0x01);    // clear display
         
         LCD_2x16_WriteMsg(msg,0);
         
+        float valueI;
         
+        valueI =(float)( ADC_GetConversion(current)/57.667-220.9); // TODO explain values
+        
+        snprintf(msg, MAX_COL+1, "I = %3.1f [mA]   ", valueI);
+       
+        LCD_2x16_WriteMsg(msg,1);
         
         
         
