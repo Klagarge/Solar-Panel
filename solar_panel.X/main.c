@@ -56,6 +56,8 @@ void main(void)
     
     Lcd_Init(); 
     adc_init();
+    uint16_t offsetCurrent = 0;
+    offsetCurrent = measure_current(offsetCurrent);
 
     // If using interrupts in PIC18 High/Low Priority Mode you need to enable the Global High and Low Interrupts
     // If using interrupts in PIC Mid-Range Compatibility Mode you need to enable the Global and Peripheral Interrupts
@@ -82,10 +84,10 @@ void main(void)
         char msg[MAX_COL+1];
         //LCD_2x16_WriteCmd(0x01);    // clear display
         
-        snprintf(msg, MAX_COL+1, "U = %4i [mV]   ", valueV);
+        snprintf(msg, MAX_COL+1, "U = %04u [mV]   ", valueV);
         LCD_2x16_WriteMsg(msg,0);
         
-        snprintf(msg, MAX_COL+1, "I = %4i [uA]   ", valueI);
+        snprintf(msg, MAX_COL+1, "I = %04u [uA]   ", valueI);
         LCD_2x16_WriteMsg(msg,1);
         
     }
