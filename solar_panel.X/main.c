@@ -44,6 +44,7 @@
 #include "mcc_generated_files/mcc.h"
 #include "lcd/lcd.h"
 
+#define MAX_COL 16
 /*
                          Main application
  */
@@ -75,9 +76,11 @@ void main(void)
         float value;
         
         value =(float)( ADC_GetConversion(voltage)/19.859);
-        char msg[16];
-        sprintf(msg, "Value : %3.1f mV", value);
-       // LCD_2x16_WriteCmd(0x01);    // clear display
+        char msg[MAX_COL+1];
+        
+        snprintf(msg, MAX_COL+1, "Value : %3.1f mV   ", value);
+        
+        //LCD_2x16_WriteCmd(0x01);    // clear display
         
         LCD_2x16_WriteMsg(msg,0);
         
