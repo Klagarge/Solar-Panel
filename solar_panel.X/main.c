@@ -43,6 +43,7 @@
 
 #include "mcc_generated_files/mcc.h"
 #include "lcd/lcd.h"
+#include "measure.h"
 
 #define MAX_COL 16
 /*
@@ -54,6 +55,7 @@ void main(void)
     SYSTEM_Initialize();
     
     Lcd_Init(); 
+    adc_init();
 
     // If using interrupts in PIC18 High/Low Priority Mode you need to enable the Global High and Low Interrupts
     // If using interrupts in PIC Mid-Range Compatibility Mode you need to enable the Global and Peripheral Interrupts
@@ -73,38 +75,19 @@ void main(void)
 
     while (1)
     {
-        float valueV;
         
-        valueV =(float)( ADC_GetConversion(voltage)/19.859); // TODO explain values
+        uint16_t valueV = measure_voltage();
+        uint16_t valueI = measure_current(offsetCurrent);
+        
         char msg[MAX_COL+1];
-        
-        snprintf(msg, MAX_COL+1, "U = %3.1f [mV]   ", valueV);
-        
         //LCD_2x16_WriteCmd(0x01);    // clear display
         
+        snprintf(msg, MAX_COL+1, "U = %4i [mV]   ", valueV);
         LCD_2x16_WriteMsg(msg,0);
         
-        float valueI;
-        
-        valueI =(float)( ADC_GetConversion(current)/57.667-220.9); // TODO explain values
-        
-        snprintf(msg, MAX_COL+1, "I = %3.1f [mA]   ", valueI);
-       
+        snprintf(msg, MAX_COL+1, "I = %4i [uA]   ", valueI);
         LCD_2x16_WriteMsg(msg,1);
         
-        
-        
-        
-        
-        /*
-        LCD_2x16_WriteMsg("TURBOPUTE",0);
-        LCD_2x16_WriteMsg("bip ",1);
-        for(uint32_t i = 0; i<100000; i++)
-        {}
-        LCD_2x16_WriteMsg("boup",1);
-        for(uint32_t i = 0; i<100000; i++)
-        {}
-        */
     }
 }
 /**
