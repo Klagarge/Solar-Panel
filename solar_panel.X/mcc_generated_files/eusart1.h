@@ -91,8 +91,7 @@ extern volatile uint8_t eusart1RxCount;
 /**
   Section: EUSART1 APIs
 */
-
-void (*EUSART1_RxDefaultInterruptHandler)(void);
+extern void (*EUSART1_RxDefaultInterruptHandler)(void);
 
 /**
   @Summary

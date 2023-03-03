@@ -70,6 +70,8 @@ volatile eusart1_status_t eusart1RxLastError;
 /**
   Section: EUSART1 APIs
 */
+void (*EUSART1_RxDefaultInterruptHandler)(void);
+
 void (*EUSART1_FramingErrorHandler)(void);
 void (*EUSART1_OverrunErrorHandler)(void);
 void (*EUSART1_ErrorHandler)(void);
@@ -91,8 +93,8 @@ void EUSART1_Initialize(void)
     // SPEN enabled; RX9 9-bit; CREN enabled; ADDEN disabled; SREN disabled; 
     RCSTA1 = 0xD0;
 
-    // TX9 9-bit; TX9D 0; SENDB sync_break_complete; TXEN enabled; SYNC synchronous; BRGH hi_speed; CSRC master_mode; 
-    TXSTA1 = 0xF4;
+    // TX9 9-bit; TX9D 0; SENDB sync_break_complete; TXEN enabled; SYNC asynchronous; BRGH hi_speed; CSRC master_mode; 
+    TXSTA1 = 0xE4;
 
     // 
     SPBRG1 = 0x8A;
@@ -138,12 +140,11 @@ eusart1_status_t EUSART1_get_last_status(void){
 uint8_t EUSART1_Read(void)
 {
     uint8_t readValue  = 0;
-    RCSTA1bits.SREN = 1;
     
     while(0 == eusart1RxCount)
     {
     }
-    
+
     eusart1RxLastError = eusart1RxStatusBuffer[eusart1RxTail];
 
     readValue = eusart1RxBuffer[eusart1RxTail++];
@@ -160,14 +161,14 @@ uint8_t EUSART1_Read(void)
 
 void EUSART1_Write(uint8_t txData)
 {
-    RCSTA1bits.SREN = 0;
-    RCSTA1bits.CREN = 0;	
     while(0 == PIR1bits.TX1IF)
     {
     }
 
     TXREG1 = txData;    // Write the data byte to the USART.
 }
+
+
 
 void EUSART1_Receive_ISR(void)
 {
@@ -178,7 +179,7 @@ void EUSART1_Receive_ISR(void)
         eusart1RxStatusBuffer[eusart1RxHead].ferr = 1;
         EUSART1_FramingErrorHandler();
     }
-    
+
     if(RCSTA1bits.OERR){
         eusart1RxStatusBuffer[eusart1RxHead].oerr = 1;
         EUSART1_OverrunErrorHandler();
@@ -190,7 +191,7 @@ void EUSART1_Receive_ISR(void)
         EUSART1_RxDataHandler();
     }
     
-    // or set custom function using eusart1_SetRxInterruptHandler()
+    // or set custom function using EUSART1_SetRxInterruptHandler()
 }
 
 void EUSART1_RxDataHandler(void){
@@ -201,7 +202,6 @@ void EUSART1_RxDataHandler(void){
         eusart1RxHead = 0;
     }
     eusart1RxCount++;
-    
 }
 
 void EUSART1_DefaultFramingErrorHandler(void){}
