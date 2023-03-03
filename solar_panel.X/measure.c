@@ -42,7 +42,7 @@ uint16_t measure_voltage()
         sum += measure_adc(VOLTAGE_CHANNEL);
     }
     sum /= AVERAGE_SAMPLES;
-    sum = (sum * ADC_RESOLUTION) / ADC_REFH;
+    sum = (sum * ADC_REFH) / ADC_RESOLUTION;
     return (uint16_t)(sum);
 }
 
@@ -52,9 +52,11 @@ uint16_t measure_current(uint16_t offset)
     for(int i = 0; i< AVERAGE_SAMPLES; i++){
         sum += measure_adc(CURRENT_CHANNEL);
     } 
-    uint32_t m = (sum / AVERAGE_SAMPLES);
+    uint32_t m = (sum / AVERAGE_SAMPLES);   // m is bits
+    m = (m * ADC_REFH) / ADC_RESOLUTION;    // m is mV
+    m *= 1000;                              // m is uV
     m /= GAIN;
-    m /= RESISTOR;
+    m /= RESISTOR;                          // m is uA
     if(m <= offset){
         m = 0;
     } else {
