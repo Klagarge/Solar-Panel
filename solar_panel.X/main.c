@@ -53,6 +53,7 @@ void main(void)
 {
     // Initialize the device
     SYSTEM_Initialize();
+    EPWM1_LoadDutyValue(0);
     
     Lcd_Init(); 
     adc_init();
@@ -74,23 +75,24 @@ void main(void)
 
     // Disable the Peripheral Interrupts
     //INTERRUPT_PeripheralInterruptDisable();
-
+    uint16_t foo = 512;
     while (1)
     {
-        
+        foo = ++foo%1023;
+        EPWM1_LoadDutyValue(foo);
         uint16_t valueV = measure_voltage();
         uint16_t valueI = measure_current(offsetCurrent);
         
         char msg[MAX_COL+1];
         //LCD_2x16_WriteCmd(0x01);    // clear display
         
-        snprintf(msg, MAX_COL+1, "U = %04u [mV]   ", valueV);
+        sprintf(msg, "U = %04d [mV] ", valueV);
         LCD_2x16_WriteMsg(msg,0);
         
-        snprintf(msg, MAX_COL+1, "I = %04u [uA]   ", valueI);
+        sprintf(msg, "I = %04d [uA] ", valueI);
         LCD_2x16_WriteMsg(msg,1);
         
-    }
+    }   
 }
 /**
  End of File
