@@ -44,6 +44,7 @@
 #include "mcc_generated_files/mcc.h"
 #include "lcd/lcd.h"
 #include "measure.h"
+#include "modbus.h"
 
 #define MAX_COL 16
 /*
@@ -60,6 +61,7 @@ void main(void)
     
     Lcd_Init(); 
     adc_init();
+    modbus_init(0x80);
     uint16_t offsetCurrent = 0;
     offsetCurrent = measure_current(offsetCurrent);
 
@@ -108,6 +110,9 @@ void resetTMR0(void){
 }
 
 void endFrame(void){
+    TMR0_StopTimer();
+    modbus_analyse_and_answer();
+    
     // TODO
 }
 /**
