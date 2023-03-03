@@ -49,6 +49,9 @@
 /*
                          Main application
  */
+void resetTMR0();
+void endFrame();
+
 void main(void)
 {
     // Initialize the device
@@ -65,17 +68,19 @@ void main(void)
     // Use the following macros to:
 
     // Enable the Global Interrupts
-    //INTERRUPT_GlobalInterruptEnable();
+    INTERRUPT_GlobalInterruptEnable();
 
     // Disable the Global Interrupts
     //INTERRUPT_GlobalInterruptDisable();
 
     // Enable the Peripheral Interrupts
-    //INTERRUPT_PeripheralInterruptEnable();
+    INTERRUPT_PeripheralInterruptEnable();
 
     // Disable the Peripheral Interrupts
     //INTERRUPT_PeripheralInterruptDisable();
     uint16_t foo = 512;
+    EUSART1_SetRxInterruptHandler(resetTMR0());
+    TMR0_SetInterruptHandler(endFrame());
     while (1)
     {
         foo = ++foo%1023;
@@ -93,6 +98,17 @@ void main(void)
         LCD_2x16_WriteMsg(msg,1);
         
     }   
+}
+
+
+void resetTMR0(){
+    TMR0_Reload();
+    TMR0_StartTimer();
+    INTCONbits.TMR0IF = 0;
+}
+
+void endFrame(){
+    // TODO
 }
 /**
  End of File
