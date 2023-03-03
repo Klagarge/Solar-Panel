@@ -49,8 +49,8 @@
 /*
                          Main application
  */
-void resetTMR0();
-void endFrame();
+void resetTMR0(void);
+void endFrame(void);
 
 void main(void)
 {
@@ -79,8 +79,8 @@ void main(void)
     // Disable the Peripheral Interrupts
     //INTERRUPT_PeripheralInterruptDisable();
     uint16_t foo = 512;
-    EUSART1_SetRxInterruptHandler(resetTMR0());
-    TMR0_SetInterruptHandler(endFrame());
+    EUSART1_SetRxInterruptHandler(resetTMR0);
+    TMR0_SetInterruptHandler(endFrame);
     while (1)
     {
         foo = ++foo%1023;
@@ -101,13 +101,13 @@ void main(void)
 }
 
 
-void resetTMR0(){
+void resetTMR0(void){
+    INTCONbits.TMR0IF = 0;
     TMR0_Reload();
     TMR0_StartTimer();
-    INTCONbits.TMR0IF = 0;
 }
 
-void endFrame(){
+void endFrame(void){
     // TODO
 }
 /**
