@@ -1,21 +1,21 @@
 /**
-  Generated Pin Manager File
+  EPWM1 Generated Driver File
 
-  Company:
+  @Company
     Microchip Technology Inc.
 
-  File Name:
-    pin_manager.c
+  @File Name
+    epwm1.h
 
-  Summary:
-    This is the Pin Manager file generated using PIC10 / PIC12 / PIC16 / PIC18 MCUs
+  @Summary
+    This is the generated driver implementation file for the EPWM1 driver using PIC10 / PIC12 / PIC16 / PIC18 MCUs
 
-  Description:
-    This header file provides implementations for pin APIs for all pins selected in the GUI.
+  @Description
+    This header file provides implementations for driver APIs for EPWM1.
     Generation Information :
         Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.81.8
         Device            :  PIC18F97J60
-        Driver Version    :  2.0
+        Driver Version    :  2.01
     The generated drivers are tested against the following:
         Compiler          :  XC8 2.36 and above
         MPLAB             :  MPLAB X 6.00
@@ -44,54 +44,90 @@
     SOFTWARE.
 */
 
-#include "pin_manager.h"
+#ifndef EPWM1_H
+#define EPWM1_H
 
+/**
+  Section: Included Files
+*/
 
-void PIN_MANAGER_Initialize(void)
-{
-    /**
-    LATx registers
-    */
-    LATE = 0x00;
-    LATJ = 0x00;
-    LATD = 0x00;
-    LATA = 0x00;
-    LATF = 0x00;
-    LATB = 0x00;
-    LATG = 0x00;
-    LATC = 0x00;
-    LATH = 0x00;
+#include <xc.h>
+#include <stdint.h>
 
-    /**
-    TRISx registers
-    */
-    TRISE = 0xFF;
-    TRISF = 0xFF;
-    TRISA = 0x3F;
-    TRISG = 0xFF;
-    TRISB = 0xFF;
-    TRISH = 0xFF;
-    TRISC = 0xFB;
-    TRISD = 0xFF;
-    TRISJ = 0xFF;
+#ifdef __cplusplus  // Provide C++ Compatibility
+
+    extern "C" {
+
+#endif
+
+/**
+  Section: EPWM Module APIs
+*/
+
+/**
+  @Summary
+    Initializes the EPWM1
+
+  @Description
+    This routine initializes the EPWM1 module.
+    This routine must be called before any other EPWM1 routine is called.
+    This routine should only be called once during system initialization.
+
+  @Preconditions
+    None
+
+  @Param
+    None
+
+  @Returns
+    None
+
+  @Comment
     
-    /**
-    PCFG setting
-    */   
-    ADCON1bits.PCFG = 0x00;
 
+ @Example
+    <code>
+    uint16_t dutycycle;
 
-    
-    
-  
-   
-}
+    ECCP1_Initialize();
+	EPWM1_LoadDutyValue(dutycycle);
+    </code>
+ */
+void EPWM1_Initialize(void);
 
-void PIN_MANAGER_IOC(void)
-{
+/**
+  @Summary
+    Loads 16-bit duty cycle.
 
-}
+  @Description
+    This routine loads the 16 bit duty cycle value.
 
+  @Preconditions
+    EPWM1_Initialize() function should have been called before calling this function.
+
+  @Param
+    Pass 16bit duty cycle value.
+
+  @Returns
+    None
+
+  @Example
+    <code>
+    uint16_t dutycycle;
+
+    EPWM1_Initialize();
+    EPWM1_LoadDutyValue(dutycycle);
+    </code>
+*/
+void EPWM1_LoadDutyValue(uint16_t dutyValue);
+        
+#ifdef __cplusplus  // Provide C++ Compatibility
+
+    }
+
+#endif
+
+#endif	//EPWM1_H
 /**
  End of File
 */

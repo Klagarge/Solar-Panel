@@ -1,24 +1,24 @@
 /**
-  Generated Pin Manager File
+  TMR2 Generated Driver File
 
-  Company:
+  @Company
     Microchip Technology Inc.
 
-  File Name:
-    pin_manager.c
+  @File Name
+    tmr2.c
 
-  Summary:
-    This is the Pin Manager file generated using PIC10 / PIC12 / PIC16 / PIC18 MCUs
+  @Summary
+    This is the generated driver implementation file for the TMR2 driver using PIC10 / PIC12 / PIC16 / PIC18 MCUs
 
-  Description:
-    This header file provides implementations for pin APIs for all pins selected in the GUI.
+  @Description
+    This source file provides APIs for TMR2.
     Generation Information :
         Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.81.8
         Device            :  PIC18F97J60
-        Driver Version    :  2.0
+        Driver Version    :  2.01
     The generated drivers are tested against the following:
         Compiler          :  XC8 2.36 and above
-        MPLAB             :  MPLAB X 6.00
+        MPLAB 	          :  MPLAB X 6.00
 */
 
 /*
@@ -44,54 +44,81 @@
     SOFTWARE.
 */
 
-#include "pin_manager.h"
+/**
+  Section: Included Files
+*/
 
-
-void PIN_MANAGER_Initialize(void)
-{
-    /**
-    LATx registers
-    */
-    LATE = 0x00;
-    LATJ = 0x00;
-    LATD = 0x00;
-    LATA = 0x00;
-    LATF = 0x00;
-    LATB = 0x00;
-    LATG = 0x00;
-    LATC = 0x00;
-    LATH = 0x00;
-
-    /**
-    TRISx registers
-    */
-    TRISE = 0xFF;
-    TRISF = 0xFF;
-    TRISA = 0x3F;
-    TRISG = 0xFF;
-    TRISB = 0xFF;
-    TRISH = 0xFF;
-    TRISC = 0xFB;
-    TRISD = 0xFF;
-    TRISJ = 0xFF;
-    
-    /**
-    PCFG setting
-    */   
-    ADCON1bits.PCFG = 0x00;
-
-
-    
-    
-  
-   
-}
-
-void PIN_MANAGER_IOC(void)
-{
-
-}
+#include <xc.h>
+#include "tmr2.h"
 
 /**
- End of File
+  Section: Global Variables Definitions
+*/
+
+/**
+  Section: TMR2 APIs
+*/
+
+void TMR2_Initialize(void)
+{
+    // Set TMR2 to the options selected in the User Interface
+
+    // PR2 255; 
+    PR2 = 0xFF;
+
+    // TMR2 0; 
+    TMR2 = 0x00;
+
+    // Clearing IF flag.
+    PIR1bits.TMR2IF = 0;
+
+    // T2CKPS 1:1; TOUTPS 1:1; TMR2ON on; 
+    T2CON = 0x04;
+}
+
+void TMR2_StartTimer(void)
+{
+    // Start the Timer by writing to TMRxON bit
+    T2CONbits.TMR2ON = 1;
+}
+
+void TMR2_StopTimer(void)
+{
+    // Stop the Timer by writing to TMRxON bit
+    T2CONbits.TMR2ON = 0;
+}
+
+uint8_t TMR2_ReadTimer(void)
+{
+    uint8_t readVal;
+
+    readVal = TMR2;
+
+    return readVal;
+}
+
+void TMR2_WriteTimer(uint8_t timerVal)
+{
+    // Write to the Timer2 register
+    TMR2 = timerVal;
+}
+
+void TMR2_LoadPeriodRegister(uint8_t periodVal)
+{
+   PR2 = periodVal;
+}
+
+bool TMR2_HasOverflowOccured(void)
+{
+    // check if  overflow has occurred by checking the TMRIF bit
+    bool status = PIR1bits.TMR2IF;
+    if(status)
+    {
+        // Clearing IF flag.
+        PIR1bits.TMR2IF = 0;
+    }
+    return status;
+}
+/**
+  End of File
 */
