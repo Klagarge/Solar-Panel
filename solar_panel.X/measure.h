@@ -8,7 +8,7 @@
 
 #include <stdint.h>
 
-static uint16_t offsetCurrent;
+
 
 /**
  * Initialize ADC and pins for measuring current and voltage

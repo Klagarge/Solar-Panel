@@ -5,7 +5,7 @@
 
 #define VOLTAGE_CHANNEL 0x5
 #define CURRENT_CHANNEL 0x6
-#define ADC_RESOLUTION  4096 - 1
+#define ADC_RESOLUTION  (1024 - 1)
 #define ADC_REFH        3300
 #define GAIN            66
 #define RESISTOR        3
@@ -13,14 +13,10 @@
 // Number of samples to do the averaging during measures
 #define AVERAGE_SAMPLES 8
 
-uint16_t samplesVoltage[AVERAGE_SAMPLES];
-uint16_t samplesCurrent[AVERAGE_SAMPLES];
-
-
 void adc_init(void)
 {
 	// TODO -> complete adc initialisation
-    offsetCurrent = measure_current(0);
+    //offsetCurrent = measure_current(0);
 
 }
 
@@ -36,20 +32,36 @@ static uint16_t measure_adc(uint8_t channel)
 	return (uint16_t) (ADC_GetConversion(channel));
 }
 
+
+
 uint16_t measure_voltage()
 {
-	uint16_t m = measure_adc(VOLTAGE_CHANNEL);
-    m /= 20; // TODO Explain why 20
-    return m;
+    uint32_t sum = 0;
+    
+    for(int i = 0; i < AVERAGE_SAMPLES; i++) {
+        sum += measure_adc(VOLTAGE_CHANNEL);
+    }
+    sum /= AVERAGE_SAMPLES;
+    sum = (sum * ADC_REFH) / ADC_RESOLUTION;
+    return (uint16_t)(sum);
 }
 
 uint16_t measure_current(uint16_t offset)
 {
-	uint16_t m = measure_adc(CURRENT_CHANNEL);
-    m -= offset;
-    if(m <= 0){
-        m = 0;
-    }
+	uint32_t sum = 0;
+    for(int i = 0; i< AVERAGE_SAMPLES; i++){
+        sum += measure_adc(CURRENT_CHANNEL);
+    } 
+    uint32_t m = (sum / AVERAGE_SAMPLES);   // m is bits
+    m = (m * ADC_REFH) / ADC_RESOLUTION;    // m is mV
+    m *= 1000;                              // m is uV
     m /= GAIN;
-    return m;
+    m /= RESISTOR;                          // m is uA
+    if(m <= offset){
+        m = 0;
+    } else {
+        m -= offset;
+    }
+    
+    return (uint16_t)m;
 }

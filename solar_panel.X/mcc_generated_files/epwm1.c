@@ -1,24 +1,24 @@
 /**
-  @Generated PIC10 / PIC12 / PIC16 / PIC18 MCUs Source File
+  EPWM1 Generated Driver File
 
-  @Company:
+  @Company
     Microchip Technology Inc.
 
-  @File Name:
-    mcc.c
+  @File Name
+    epwm1.c
 
-  @Summary:
-    This is the mcc.c file generated using PIC10 / PIC12 / PIC16 / PIC18 MCUs
+  @Summary
+    This is the generated driver implementation file for the EPWM1 driver using PIC10 / PIC12 / PIC16 / PIC18 MCUs
 
-  @Description:
-    This header file provides implementations for driver APIs for all modules selected in the GUI.
+  @Description
+    This source file provides implementations for driver APIs for EPWM1.
     Generation Information :
         Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.81.8
         Device            :  PIC18F97J60
-        Driver Version    :  2.00
+        Driver Version    :  2.01
     The generated drivers are tested against the following:
-        Compiler          :  XC8 2.36 and above or later
-        MPLAB             :  MPLAB X 6.00
+        Compiler          :  XC8 2.36 and above
+         MPLAB 	          :  MPLAB X 6.00
 */
 
 /*
@@ -44,28 +44,53 @@
     SOFTWARE.
 */
 
-#include "mcc.h"
+/**
+  Section: Included Files
+*/
 
+#include <xc.h>
+#include "epwm1.h"
 
-void SYSTEM_Initialize(void)
+/**
+  Section: Macro Declarations
+*/
+
+#define PWM1_INITIALIZE_DUTY_VALUE    511
+
+/**
+  Section: EPWM Module APIs
+*/
+
+void EPWM1_Initialize(void)
 {
+    // Set the EPWM1 to the options selected in the User Interface
+	
+	// CCP1M P1A,P1C: active high; P1B,P1D: active high; DC1B 3; P1M single; 
+	CCP1CON = 0x3C;    
+	
+	// ECCPASE operating; PSSBD P1BP1D_0; PSSAC P1AP1C_0; ECCPAS disabled; 
+	ECCP1AS = 0x00;    
+	
+	// P1RSEN automatic_restart; P1DC0 0; 
+	ECCP1DEL = 0x80;    
+	
+	// CCPR1H 0; 
+	CCPR1H = 0x00;    
+	
+	// CCPR1L 127; 
+	CCPR1L = 0x7F;    
 
-    PIN_MANAGER_Initialize();
-    OSCILLATOR_Initialize();
-    EPWM1_Initialize();
-    TMR2_Initialize();
-    ADC_Initialize();
 }
 
-void OSCILLATOR_Initialize(void)
+void EPWM1_LoadDutyValue(uint16_t dutyValue)
 {
-    // SCS Primary_OSC; OSTS intosc; IDLEN disabled; 
-    OSCCON = 0x02;
-    // PLLEN disabled; PPST0 disabled; PPRE divide_by_3; PPST1 divide_by_3; 
-    OSCTUNE = 0x00;
+   // Writing to 8 MSBs of pwm duty cycle in CCPRL register
+    CCPR1L = ((dutyValue & 0x03FC)>>2);
+    
+   // Writing to 2 LSBs of pwm duty cycle in CCPCON register
+    CCP1CON = ((uint8_t)(CCP1CON & 0xCF) | ((dutyValue & 0x0003)<<4));
 }
-
-
 /**
  End of File
 */
+
