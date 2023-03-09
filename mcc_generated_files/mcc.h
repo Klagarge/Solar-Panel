@@ -1,14 +1,14 @@
 /**
-  @Generated PIC10 / PIC12 / PIC16 / PIC18 MCUs Source File
+  @Generated PIC10 / PIC12 / PIC16 / PIC18 MCUs Header File
 
   @Company:
     Microchip Technology Inc.
 
   @File Name:
-    mcc.c
+    mcc.h
 
   @Summary:
-    This is the mcc.c file generated using PIC10 / PIC12 / PIC16 / PIC18 MCUs
+    This is the mcc.h file generated using PIC10 / PIC12 / PIC16 / PIC18 MCUs
 
   @Description:
     This header file provides implementations for driver APIs for all modules selected in the GUI.
@@ -44,28 +44,50 @@
     SOFTWARE.
 */
 
-#include "mcc.h"
+#ifndef MCC_H
+#define	MCC_H
+#include <xc.h>
+#include "device_config.h"
+#include "pin_manager.h"
+#include <stdint.h>
+#include <stdbool.h>
+#include <conio.h>
+#include "interrupt_manager.h"
+#include "epwm1.h"
+#include "tmr2.h"
+#include "adc.h"
+#include "tmr0.h"
+#include "eusart1.h"
 
 
-void SYSTEM_Initialize(void)
-{
 
-    PIN_MANAGER_Initialize();
-    OSCILLATOR_Initialize();
-    EPWM1_Initialize();
-    TMR2_Initialize();
-    ADC_Initialize();
-}
+/**
+ * @Param
+    none
+ * @Returns
+    none
+ * @Description
+    Initializes the device to the default states configured in the
+ *                  MCC GUI
+ * @Example
+    SYSTEM_Initialize(void);
+ */
+void SYSTEM_Initialize(void);
 
-void OSCILLATOR_Initialize(void)
-{
-    // SCS Primary_OSC; OSTS intosc; IDLEN disabled; 
-    OSCCON = 0x02;
-    // PLLEN disabled; PPST0 disabled; PPRE divide_by_3; PPST1 divide_by_3; 
-    OSCTUNE = 0x00;
-}
+/**
+ * @Param
+    none
+ * @Returns
+    none
+ * @Description
+    Initializes the oscillator to the default states configured in the
+ *                  MCC GUI
+ * @Example
+    OSCILLATOR_Initialize(void);
+ */
+void OSCILLATOR_Initialize(void);
 
-
+#endif	/* MCC_H */
 /**
  End of File
 */

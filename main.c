@@ -44,11 +44,15 @@
 #include "mcc_generated_files/mcc.h"
 #include "lcd/lcd.h"
 #include "measure.h"
+#include "modbus.h"
 
 #define MAX_COL 16
 /*
                          Main application
  */
+void resetTMR0(void);
+void endFrame(void);
+
 void main(void)
 {
     // Initialize the device
@@ -57,6 +61,7 @@ void main(void)
     
     Lcd_Init(); 
     adc_init();
+    modbus_init(0x80);
     uint16_t offsetCurrent = 0;
     offsetCurrent = measure_current(offsetCurrent);
 
@@ -65,17 +70,19 @@ void main(void)
     // Use the following macros to:
 
     // Enable the Global Interrupts
-    //INTERRUPT_GlobalInterruptEnable();
+    INTERRUPT_GlobalInterruptEnable();
 
     // Disable the Global Interrupts
     //INTERRUPT_GlobalInterruptDisable();
 
     // Enable the Peripheral Interrupts
-    //INTERRUPT_PeripheralInterruptEnable();
+    INTERRUPT_PeripheralInterruptEnable();
 
     // Disable the Peripheral Interrupts
     //INTERRUPT_PeripheralInterruptDisable();
     uint16_t foo = 512;
+    EUSART1_SetRxInterruptHandler(resetTMR0);
+    TMR0_SetInterruptHandler(endFrame);
     while (1)
     {
         foo = ++foo%1023;
@@ -93,6 +100,20 @@ void main(void)
         LCD_2x16_WriteMsg(msg,1);
         
     }   
+}
+
+
+void resetTMR0(void){
+    INTCONbits.TMR0IF = 0;
+    TMR0_Reload();
+    TMR0_StartTimer();
+}
+
+void endFrame(void){
+    TMR0_StopTimer();
+    modbus_analyse_and_answer();
+    
+    // TODO
 }
 /**
  End of File

@@ -1,3 +1,6 @@
 solar_panel.X/build/
 solar_panel.X/debug/
 solar_panel.X/dist/
+build/
+debug/
+dist/

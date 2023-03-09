@@ -1,6 +1,6 @@
 #include "modbus.h"
 #include "crc.h"
-//#include "uart.h"
+#include "uart.h"
 #include <xc.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -37,9 +37,11 @@ void modbus_timer(void)
    
 }
 
-uint8_t modbus_analyse_and_answer(void)
-{
+uint8_t modbus_analyse_and_answer(void) {
 	// TODO -> complete the modbus analyse and answer
+    rx_buf[0] = 0;
+    
+    //sprintf(tx_buf, "%i", modbusAddress, );
   
 }
 
@@ -63,5 +65,5 @@ void modbus_send(uint8_t length)
 void modbus_init(uint8_t address)
 {
 	modbusAddress = address;
-  // TODO -> configute timer for modbus usage
+  // TODO -> confikre timer for modbus usage
 }

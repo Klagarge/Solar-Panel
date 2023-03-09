@@ -75,6 +75,14 @@
 #define RC2_SetDigitalInput()       do { TRISCbits.TRISC2 = 1; } while(0)
 #define RC2_SetDigitalOutput()      do { TRISCbits.TRISC2 = 0; } while(0)
 
+// get/set RC6 procedures
+#define RC6_SetHigh()               do { LATCbits.LATC6 = 1; } while(0)
+#define RC6_SetLow()                do { LATCbits.LATC6 = 0; } while(0)
+#define RC6_Toggle()                do { LATCbits.LATC6 = ~LATCbits.LATC6; } while(0)
+#define RC6_GetValue()              PORTCbits.RC6
+#define RC6_SetDigitalInput()       do { TRISCbits.TRISC6 = 1; } while(0)
+#define RC6_SetDigitalOutput()      do { TRISCbits.TRISC6 = 0; } while(0)
+
 // get/set voltage aliases
 #define voltage_TRIS                 TRISFbits.TRISF0
 #define voltage_LAT                  LATFbits.LATF0
