@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=solar_panel.X
+PROJECTNAME=solar_panel
 
 # Active Configuration
 DEFAULTCONF=default
