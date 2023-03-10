@@ -15,6 +15,7 @@ uint8_t modbusAddress;
 uint16_t input_registers[2];
 uint16_t holding_registers[2];
 
+
 // Modbus error codes
 #define ILLEGAL_FUNCTION		1
 #define ILLEGAL_DATA_ADDRESS	2
@@ -33,7 +34,10 @@ uint8_t recPtr = 0;
 
 void modbus_timer(void)
 {
-	// TODO -> complete what to do on modbus timer event
+	INTCONbits.TMR0IF = 0;
+    recPtr = 0;   
+    TMR0_StopTimer();
+    modbus_analyse_and_answer();
    
 }
 
@@ -41,13 +45,15 @@ uint8_t modbus_analyse_and_answer(void) {
 	// TODO -> complete the modbus analyse and answer
     rx_buf[0] = 0;
     
-    //sprintf(tx_buf, "%i", modbusAddress, );
+   // sprintf(tx_buf, "%i", modbusAddress, );
   
 }
 
-void modbus_char_recvd(uint8_t c)
+void modbus_char_recvd(void)
 {
-	// TODO -> complete modbus char receive 
+	rx_buf[recPtr++] = RCREG1;
+    TMR0_Reload();
+    TMR0_StartTimer();
 }
 
 void modbus_send(uint8_t length)
@@ -65,5 +71,6 @@ void modbus_send(uint8_t length)
 void modbus_init(uint8_t address)
 {
 	modbusAddress = address;
-  // TODO -> confikre timer for modbus usage
+    EUSART1_SetRxInterruptHandler(modbus_char_recvd);
+    TMR0_SetInterruptHandler(modbus_timer);
 }
