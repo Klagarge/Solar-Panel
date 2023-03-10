@@ -53,6 +53,9 @@
 void resetTMR0(void);
 void endFrame(void);
 
+uint8_t nRxByte = 0;
+extern uint8_t rx_buf[256];
+
 void main(void)
 {
     // Initialize the device
@@ -104,18 +107,14 @@ void main(void)
 
 
 void resetTMR0(void){
-    volatile uint8_t dummy;
-    dummy = EUSART1_Read();
-    
-    
+    rx_buf[nRxByte++] = RCREG1;
     TMR0_Reload();
     TMR0_StartTimer();
 }
 
 void endFrame(void){
-    
-    
     INTCONbits.TMR0IF = 0;
+    nRxByte = 0;   
     TMR0_StopTimer();
     modbus_analyse_and_answer();
     
