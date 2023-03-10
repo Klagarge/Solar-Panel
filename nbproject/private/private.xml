@@ -3,15 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/remi/Downloads/MCU/solar_panel/solar_panel.X/modbus.c</file>
-            <file>file:/C:/Users/remi/Downloads/MCU/solar_panel/solar_panel.X/measure.c</file>
-            <file>file:/C:/Users/remi/Downloads/MCU/solar_panel/solar_panel.X/modbus.h</file>
-            <file>file:/C:/Users/remi/Downloads/MCU/solar_panel/solar_panel.X/main.c</file>
-            <file>file:/C:/Program%20Files/Microchip/xc8/v2.40/pic/sources/c99/common/lwmod.c</file>
-            <file>file:/C:/Users/remi/Downloads/MCU/solar_panel/solar_panel.X/mcc_generated_files/interrupt_manager.c</file>
-            <file>file:/C:/Program%20Files/Microchip/xc8/v2.40/pic/sources/c99/common/aomod.c</file>
-            <file>file:/C:/Users/remi/Downloads/MCU/solar_panel/solar_panel.X/mcc_generated_files/tmr0.c</file>
-            <file>file:/C:/Users/remi/Downloads/MCU/solar_panel/solar_panel.X/mcc_generated_files/eusart1.c</file>
+            <file>file:/C:/Users/remi/MPLABXProjects/solar_panel/mcc_generated_files/interrupt_manager.c</file>
+            <file>file:/C:/Users/remi/MPLABXProjects/solar_panel/main.c</file>
+            <file>file:/C:/Users/remi/MPLABXProjects/solar_panel/modbus.c</file>
+            <file>file:/C:/Users/remi/MPLABXProjects/solar_panel/mcc_generated_files/tmr0.c</file>
         </group>
     </open-files>
 </project-private>

@@ -43,15 +43,17 @@ void modbus_timer(void)
 extern uint16_t measure_voltage();
 uint8_t modbus_analyse_and_answer(void) {
 	// TODO -> complete the modbus analyse and answer
+    uint8_t length = 0;
     if(rx_buf[0] == modbusAddress){
-        tx_buf[0] = rx_buf[0];
-        tx_buf[1] = rx_buf[1];
+        tx_buf[0] = rx_buf[0]; // Adress
+        tx_buf[1] = rx_buf[1]; // Function
         
         switch(rx_buf[1]){
             case READ_INPUT_REGISTERS:
-                tx_buf[2] = 2;
-                tx_buf[4] = input_registers[0];
-                tx_buf[3] = input_registers[0]>>8;
+                tx_buf[2] = 2; // Data length
+                tx_buf[4] = input_registers[0];     // LSB Data
+                tx_buf[3] = input_registers[0]>>8;  // MSB Data
+                length = 5;
                 // todo choose register
                 break;
             case READ_HOLDING_REGISTERS:
@@ -66,8 +68,7 @@ uint8_t modbus_analyse_and_answer(void) {
         
     }
     rx_buf[0] = 0;
-    
-   // 
+    modbus_send(length);
   
 }
 
@@ -80,10 +81,11 @@ void modbus_char_recvd(void)
 
 void modbus_send(uint8_t length)
 {
+    
 	uint16_t temp16; 
 	uint8_t i;
 
-	// TODO -> complete modbus RCR calculation
+	// TODO -> complete modbus crc calculation
 	length += 2; // add 2 CRC bytes for total size
 
 	// For all the bytes to be transmitted
