@@ -104,12 +104,18 @@ void main(void)
 
 
 void resetTMR0(void){
-    INTCONbits.TMR0IF = 0;
+    volatile uint8_t dummy;
+    dummy = EUSART1_Read();
+    
+    
     TMR0_Reload();
     TMR0_StartTimer();
 }
 
 void endFrame(void){
+    
+    
+    INTCONbits.TMR0IF = 0;
     TMR0_StopTimer();
     modbus_analyse_and_answer();
     
