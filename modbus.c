@@ -40,12 +40,34 @@ void modbus_timer(void)
     modbus_analyse_and_answer();
    
 }
-
+extern uint16_t measure_voltage();
 uint8_t modbus_analyse_and_answer(void) {
 	// TODO -> complete the modbus analyse and answer
+    if(rx_buf[0] == modbusAddress){
+        tx_buf[0] = rx_buf[0];
+        tx_buf[1] = rx_buf[1];
+        
+        switch(rx_buf[1]){
+            case READ_INPUT_REGISTERS:
+                tx_buf[2] = 2;
+                tx_buf[4] = input_registers[0];
+                tx_buf[3] = input_registers[0]>>8;
+                // todo choose register
+                break;
+            case READ_HOLDING_REGISTERS:
+                //todo
+                break;
+            case WRITE_SINGLE_REGISTER:
+                //todo
+                break;
+                // todo CRC
+        }
+        
+        
+    }
     rx_buf[0] = 0;
     
-   // sprintf(tx_buf, "%i", modbusAddress, );
+   // 
   
 }
 
