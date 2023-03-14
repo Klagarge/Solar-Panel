@@ -45,10 +45,10 @@ void modbus_send(uint8_t length);
  * This function will be called every time a character has been received on the
  * Modbus serial port. It is called from the interrupt hander.
  * 
- * @param c : the received char
+ * @param c : the received char // removed !
  * @see interrupts.c.
  */
-void modbus_char_recvd(uint8_t c);
+void modbus_char_recvd(void);
 
 /**
  * Modbus timer finished. This function is called by the interrupt handler 

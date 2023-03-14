@@ -50,9 +50,8 @@
 /*
                          Main application
  */
-void resetTMR0(void);
-void endFrame(void);
 
+extern uint16_t input_registers[2];
 void main(void)
 {
     // Initialize the device
@@ -80,15 +79,16 @@ void main(void)
 
     // Disable the Peripheral Interrupts
     //INTERRUPT_PeripheralInterruptDisable();
-    uint16_t foo = 512;
-    EUSART1_SetRxInterruptHandler(resetTMR0);
-    TMR0_SetInterruptHandler(endFrame);
+    
+    
     while (1)
     {
-        foo = ++foo%1023;
-        EPWM1_LoadDutyValue(foo);
-        uint16_t valueV = measure_voltage();
-        uint16_t valueI = measure_current(offsetCurrent);
+    
+        EPWM1_LoadDutyValue(holding_registers[0]);
+        input_registers[0] = measure_voltage();
+        input_registers[1] = measure_current(offsetCurrent);
+        uint16_t valueV = input_registers[0];
+        uint16_t valueI = input_registers[1];
         
         char msg[MAX_COL+1];
         //LCD_2x16_WriteCmd(0x01);    // clear display
@@ -103,18 +103,6 @@ void main(void)
 }
 
 
-void resetTMR0(void){
-    INTCONbits.TMR0IF = 0;
-    TMR0_Reload();
-    TMR0_StartTimer();
-}
-
-void endFrame(void){
-    TMR0_StopTimer();
-    modbus_analyse_and_answer();
-    
-    // TODO
-}
 /**
  End of File
 */
