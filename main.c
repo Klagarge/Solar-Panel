@@ -79,12 +79,12 @@ void main(void)
 
     // Disable the Peripheral Interrupts
     //INTERRUPT_PeripheralInterruptDisable();
-    uint16_t foo = 512;
+    
     
     while (1)
     {
-        foo = ++foo%1023;
-        EPWM1_LoadDutyValue(foo);
+    
+        EPWM1_LoadDutyValue(holding_registers[0]);
         input_registers[0] = measure_voltage();
         uint16_t valueV = input_registers[0];
         uint16_t valueI = measure_current(offsetCurrent);
