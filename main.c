@@ -86,8 +86,9 @@ void main(void)
     
         EPWM1_LoadDutyValue(holding_registers[0]);
         input_registers[0] = measure_voltage();
+        input_registers[1] = measure_current(offsetCurrent);
         uint16_t valueV = input_registers[0];
-        uint16_t valueI = measure_current(offsetCurrent);
+        uint16_t valueI = input_registers[1];
         
         char msg[MAX_COL+1];
         //LCD_2x16_WriteCmd(0x01);    // clear display

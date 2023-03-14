@@ -3,9 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/remi/MPLABXProjects/solar_panel/mcc_generated_files/interrupt_manager.c</file>
+            <file>file:/C:/Program%20Files/Microchip/xc8/v2.40/pic/sources/c99/common/doprnt.c</file>
+            <file>file:/C:/Users/remi/MPLABXProjects/solar_panel/lcd/lcd.c</file>
+            <file>file:/C:/Users/remi/MPLABXProjects/solar_panel/modbus.h</file>
             <file>file:/C:/Users/remi/MPLABXProjects/solar_panel/main.c</file>
+            <file>file:/C:/Program%20Files/Microchip/xc8/v2.40/pic/sources/c99/common/aomod.c</file>
             <file>file:/C:/Users/remi/MPLABXProjects/solar_panel/modbus.c</file>
+            <file>file:/C:/Users/remi/MPLABXProjects/solar_panel/crc.c</file>
             <file>file:/C:/Users/remi/MPLABXProjects/solar_panel/mcc_generated_files/tmr0.c</file>
         </group>
     </open-files>
