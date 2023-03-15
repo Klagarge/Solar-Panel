@@ -7,6 +7,8 @@
 #define	MODBUS_H
 
 #include <stdint.h>
+#include <xc.h>
+#include <stdio.h>
 
 extern uint8_t modbusAddress;
 extern uint16_t input_registers[2];

@@ -1,14 +1,17 @@
+/*!
+ * @file modbus.c
+ * @authors Simon Donnet-Monay & Remi Heredero
+ * @date 14 march 2023
+ * @biref
+ */
+
 #include "modbus.h"
 #include "crc.h"
-#include "uart.h"
-#include <xc.h>
-#include <stdint.h>
-#include <stdio.h>
 
 // Modbus functions
-#define READ_INPUT_REGISTERS    0x04
-#define READ_HOLDING_REGISTERS  0x03
-#define WRITE_SINGLE_REGISTER   0x06
+#define READ_INPUT_REGISTERS    0x04 //!< Modbus function for read input register = 04
+#define READ_HOLDING_REGISTERS  0x03 //!< Modbus function for read holding register = 03
+#define WRITE_SINGLE_REGISTER   0x06 //!< Modbus function for write a single register = 06
 
 // Modbus data model
 uint8_t modbusAddress;
@@ -32,13 +35,11 @@ uint8_t tx_buf[256];
 // Current position pointer for storing receive position
 uint8_t recPtr = 0;
 
-void modbus_timer(void)
-{
+void modbus_timer(void) {
 	INTCONbits.TMR0IF = 0;
     recPtr = 0;   
     TMR0_StopTimer();
     modbus_analyse_and_answer();
-   
 }
 extern uint16_t measure_voltage();
 uint8_t modbus_analyse_and_answer(void) {
