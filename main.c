@@ -17,24 +17,22 @@
 
 void main(void) {
     
-/*!
- * SETUP FUNCTIONS: 
- */
+/* SETUP FUNCTIONS: */
     
-    //! Initialize the system with all mcc default configs
+    // Initialize the system with all mcc default configs
     SYSTEM_Initialize();
     
-    Lcd_Init();         //! Initialize lcd screen
-    adc_init();         //! Initialize adc for measures
-    modbus_init(0x80);  //! Initialize all specific modbus function
+    Lcd_Init();         // Initialize lcd screen
+    adc_init();         // Initialize adc for measures
+    modbus_init(0x80);  // Initialize all specific modbus function
 
-    //! Enable the Global Interrupts
+    // Enable the Global Interrupts
     INTERRUPT_GlobalInterruptEnable();
     
-    //! Enable the Peripheral Interrupts
+    // Enable the Peripheral Interrupts
     INTERRUPT_PeripheralInterruptEnable();
     
-    /*!
+    /*
      * Initialize offset current.
      * 1. disable load
      * 2. Measure current without load
@@ -44,28 +42,26 @@ void main(void) {
     EPWM1_LoadDutyValue(0);
     const uint16_t offsetCurrent = measure_current(offsetCurrent);
     
-    //! create a char array for display on lcd (with space for '\0')
+    // create a char array for display on lcd (with space for '\0')
     char msg[MAX_COL+1]; 
     
-/*!
- * LOOP MAIN PROGRAM: 
- */
+/* LOOP MAIN PROGRAM: */
     
     while (1) {
         
-        //! Get the measure and save it and the appropriate register
+        // Get the measure and save it and the appropriate register
         input_registers[0] = measure_voltage();
         input_registers[1] = measure_current(offsetCurrent);
         
-        //! Print on the first row of the lcd the Voltage
+        // Print on the first row of the lcd the Voltage
         sprintf(msg, "U = %04d [mV] ", input_registers[0]);
         LCD_2x16_WriteMsg(msg,0);
         
-        //! Print on the second row of the lcd the current
+        // Print on the second row of the lcd the current
         sprintf(msg, "I = %04d [uA] ", input_registers[1]);
         LCD_2x16_WriteMsg(msg,1);
         
-        //! Write the duty cycle for pwm from the appropriate register
+        // Write the duty cycle for pwm from the appropriate register
         EPWM1_LoadDutyValue(holding_registers[0]);
     }   
 }

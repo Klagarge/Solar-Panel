@@ -27,27 +27,30 @@ void adc_init(void)
  * @param channel : the channel to be measured
  * @return the ADC read value
  */
-static uint16_t measure_adc(uint8_t channel)
-{
+static uint16_t measure_adc(uint8_t channel) {
 	return (uint16_t) (ADC_GetConversion(channel));
 }
 
 
-
-uint16_t measure_voltage()
-{
+/**
+ * 
+ * @return 
+ */
+uint16_t measure_voltage() {
     uint32_t sum = 0;
     
+    // Make an average
     for(int i = 0; i < AVERAGE_SAMPLES; i++) {
         sum += measure_adc(VOLTAGE_CHANNEL);
     }
     sum /= AVERAGE_SAMPLES;
+    
+    // Convert sum from bits to mV
     sum = (sum * ADC_REFH) / ADC_RESOLUTION;
     return (uint16_t)(sum);
 }
 
-uint16_t measure_current(uint16_t offset)
-{
+uint16_t measure_current(uint16_t offset) {
 	uint32_t sum = 0;
     for(int i = 0; i< AVERAGE_SAMPLES; i++){
         sum += measure_adc(CURRENT_CHANNEL);
