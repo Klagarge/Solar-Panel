@@ -13,58 +13,58 @@
 // Number of samples to do the averaging during measures
 #define AVERAGE_SAMPLES 8
 
-void adc_init(void)
-{
+void adc_init(void) {
 	// TODO -> complete adc initialisation
     //offsetCurrent = measure_current(0);
-
 }
 
 /**
  * Read one ADC channel. This function is only
  * local to this file.
+ * This function make the average on samples
  *
  * @param channel : the channel to be measured
- * @return the ADC read value
+ * @return the ADC read value with an average
  */
 static uint16_t measure_adc(uint8_t channel) {
-	return (uint16_t) (ADC_GetConversion(channel));
+    uint32_t value = 0;
+    
+    // Make an average
+    for(int i = 0; i < AVERAGE_SAMPLES; i++) {
+        value += (uint16_t) (ADC_GetConversion(channel));
+    }
+    value /= AVERAGE_SAMPLES;
+	return (uint16_t) (value);
 }
 
 
 /**
- * 
+ * Measure voltage
  * @return 
  */
 uint16_t measure_voltage() {
-    uint32_t sum = 0;
-    
-    // Make an average
-    for(int i = 0; i < AVERAGE_SAMPLES; i++) {
-        sum += measure_adc(VOLTAGE_CHANNEL);
-    }
-    sum /= AVERAGE_SAMPLES;
+    uint32_t value = measure_adc(VOLTAGE_CHANNEL);
     
     // Convert sum from bits to mV
-    sum = (sum * ADC_REFH) / ADC_RESOLUTION;
-    return (uint16_t)(sum);
+    value = (value * ADC_REFH) / ADC_RESOLUTION;
+    return (uint16_t)(value);
 }
 
+/**
+ * 
+ * @param offset
+ * @return 
+ */
 uint16_t measure_current(uint16_t offset) {
-	uint32_t sum = 0;
-    for(int i = 0; i< AVERAGE_SAMPLES; i++){
-        sum += measure_adc(CURRENT_CHANNEL);
-    } 
-    uint32_t m = (sum / AVERAGE_SAMPLES);   // m is bits
-    m = (m * ADC_REFH) / ADC_RESOLUTION;    // m is mV
-    m *= 1000;                              // m is uV
-    m /= GAIN;
-    m /= RESISTOR;                          // m is uA
-    if(m <= offset){
-        m = 0;
-    } else {
-        m -= offset;
-    }
+	uint32_t value = measure_adc(CURRENT_CHANNEL);
     
-    return (uint16_t)m;
+    // Convert from bits to uA
+    value = (value * ADC_REFH) / ADC_RESOLUTION;    // [mV]
+    value *= 1000;  // [uV]
+    value /= GAIN;  // [uV]
+    value /= RESISTOR;  // [uA]
+    
+    // Return value without offset or null if it's too low
+    if(value > offset) return (uint16_t)(value-offset);
+    return 0;
 }
